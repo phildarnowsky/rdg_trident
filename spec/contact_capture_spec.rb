@@ -25,6 +25,15 @@ describe "capturing a contact after an answer" do
   end
 
   context "when the user declines a capture" do
-    it "should do that"
+    %w(no NO nO).each do |dissent|
+      context "by texting in \"#{dissent}\"" do
+        it "should do that" do
+          mo_sms dissent, '+16175551212'
+          last_response.content_type.should == 'text/plain'
+          last_response.body.should == "OK, we won't keep your number and we won't try to contact you. If you change your mind, you can start over by answering the question again."
+          User.where(:phone_number => "+16175551212").should be_empty
+        end
+      end
+    end
   end
 end
