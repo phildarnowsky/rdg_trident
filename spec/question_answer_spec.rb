@@ -1,17 +1,11 @@
-$: << File.expand_path(__FILE__ + '/../..')
-require 'trident'
-require 'rspec'
-require 'rack/test'
+require 'spec_helpers'
 
 describe "response to multiple choice question via SMS" do
-  include Rack::Test::Methods
-
-  def app
-    Trident.new
-  end
+  include SpecHelpers
 
   it "should say something" do
-    post '/sms'
+    mo_sms "D"
+
     last_response.content_type.should == 'text/plain'
     last_response.body.should == "D) Less than $2. ($1.47 actually) Amazing right? Want to learn more about fighting hunger in MA? Txt us your email or \"YES\" for info by txt."
   end

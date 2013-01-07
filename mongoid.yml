@@ -1,0 +1,16 @@
+<% mongo_uri = ENV['MONGOHQ_URL'] || "mongodb://localhost:27017/rdg_trident_#{ENV['RACK_ENV']}" %>
+
+development: &default
+  sessions:
+    default:
+      uri: <%= mongo_uri %>
+
+test:
+  <<: *default
+
+staging:
+  <<: *default
+
+production:
+  <<: *default
+
