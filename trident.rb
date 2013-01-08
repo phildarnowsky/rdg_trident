@@ -1,3 +1,5 @@
+$: << '.'
+
 require 'sinatra'
 require 'mongoid'
 require 'user'
