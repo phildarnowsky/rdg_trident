@@ -3,13 +3,18 @@ require 'mongoid'
 class User
   include Mongoid::Document
 
+  EMAIL_PATTERN = /^.*@.*$/ # ghetto email recognition
+
   field :phone_number, type: String
+  field :email, type: String
   field :save_phone_number, type: Boolean
 
   def dispatch_sms(body)
     body = body.strip.downcase
     
     case body
+    when EMAIL_PATTERN
+      save_email!(body)
     when 'yes'
       save_phone_number!
     when 'no'
@@ -22,6 +27,11 @@ class User
   def save_phone_number!
     update_attributes(save_phone_number: true)
     "OK, great! We'll remember your number and will be in touch."
+  end
+
+  def save_email!(new_email)
+    update_attributes(email: new_email)
+    "OK, great! We'll remember your email and will be in touch. You'll get a confirmation email from us shortly."
   end
 
   def delete_record!

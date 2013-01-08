@@ -21,7 +21,14 @@ describe "capturing a contact after an answer" do
   end
 
   context "when the user wants their email captured" do
-    it "should do that"
+    %w(phil@darnowsky.com Joe@hotmail.com clara@yahoo.co.uk).each do |email|
+      it "should remember the email \"#{email}\"" do
+        mo_sms(email, "+16175551212")
+        last_response.content_type.should == 'text/plain'
+        last_response.body.should == "OK, great! We'll remember your email and will be in touch. You'll get a confirmation email from us shortly."
+        User.where(:phone_number => "+16175551212", :email => email.downcase).count.should == 1
+      end
+    end
   end
 
   context "when the user declines a capture" do
@@ -35,5 +42,9 @@ describe "capturing a contact after an answer" do
         end
       end
     end
+  end
+
+  context "when the user texts in nonsense" do
+    it "should respond appropriately"
   end
 end
