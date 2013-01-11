@@ -28,6 +28,18 @@ describe "capturing a contact after an answer" do
         last_response.body.should == "OK, great! We'll remember your email and will be in touch. You'll get a confirmation email from us shortly."
         User.where(:phone_number => "+16175551212", :email => email.downcase).count.should == 1
       end
+
+      it "should send a confirmation email to \"#{email}\"" do
+        mo_sms(email, "+16175551212")
+        ActionMailer::Base.deliveries.should have(1).email
+        
+        mail = ActionMailer::Base.deliveries.first
+        mail.to.should == [email.downcase]
+
+        # proper subject & body
+        mail.subject.should == "Confirmation from RobotDoesGood"
+        mail.to_s.should include("This is your confirmation email from RobotDoesGood.")
+      end
     end
   end
 

@@ -3,9 +3,14 @@ $: << '.'
 require 'sinatra'
 require 'mongoid'
 require 'user'
+require 'mail_config'
 
 class Trident < Sinatra::Base
   Mongoid.load!('mongoid.yml')
+
+  set :show_exceptions, false
+  set :raise_errors, true
+
   post '/sms' do
     dispatch_sms(params)
   end

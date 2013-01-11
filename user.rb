@@ -1,4 +1,7 @@
+$: << '.'
+
 require 'mongoid'
+require 'mailer'
 
 class User
   include Mongoid::Document
@@ -31,11 +34,16 @@ class User
 
   def save_email!(new_email)
     update_attributes(email: new_email)
+    send_confirmation_email(new_email)
     "OK, great! We'll remember your email and will be in touch. You'll get a confirmation email from us shortly."
   end
 
   def delete_record!
     destroy
     "OK, we won't keep your number and we won't try to contact you. If you change your mind, you can start over by answering the question again."  
+  end
+
+  def send_confirmation_email(to)
+    Mailer.email_capture_confirmation_email(to).deliver
   end
 end

@@ -2,11 +2,14 @@ $: << File.expand_path(__FILE__ + '/../..')
 require 'trident'
 require 'rspec'
 require 'rack/test'
+require 'debugger'
 
 module SpecHelpers
   RSpec.configure do |config|
     config.before do
       User.delete_all
+
+      ActionMailer::Base.deliveries.clear
     end
   end
 
