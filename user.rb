@@ -22,6 +22,8 @@ class User
       save_phone_number!
     when 'no'
       delete_record!
+    else
+      respond_to_nonsense
     end
   end
 
@@ -45,5 +47,9 @@ class User
 
   def send_confirmation_email(to)
     Mailer.email_capture_confirmation_email(to).deliver
+  end
+
+  def respond_to_nonsense
+    "Sorry, I didn't quite understand that. Text us your email or \"YES\" for info by SMS."
   end
 end

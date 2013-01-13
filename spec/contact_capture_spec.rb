@@ -57,6 +57,13 @@ describe "capturing a contact after an answer" do
   end
 
   context "when the user texts in nonsense" do
-    it "should respond appropriately"
+    it "should respond appropriately" do
+      mo_sms "iweiioioier", "+16175551212"
+      last_response.content_type.should == 'text/plain'
+      last_response.body.should == "Sorry, I didn't quite understand that. Text us your email or \"YES\" for info by SMS."
+      user = User.where(:phone_number => "+16175551212").first
+      user.save_phone_number.should be_nil
+      user.email.should be_nil
+    end
   end
 end
